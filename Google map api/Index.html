@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Google Maps API Demo</title>
+    <style type="text/css">
+        #map {
+            height: 100%;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #floating-panel {
+            position: absolute;
+            top: 10px;
+            left: 25%;
+            z-index: 5;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #999;
+            text-align: center;
+            font-family: "Roboto", "sans-serif";
+            line-height: 30px;
+            padding-left: 10px;
+        }
+    </style>
+    <script>
+        const map = null;
+        function initMap() {
+
+            const utc2 = { lat: 10.845587, lng: 106.794632 };
+            const home = { lat: 13.691917, lng:108.084083 };
+
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 7,
+                center: home,
+            });
+            directionsRenderer.setMap(map);
+            calculateAndDisplayRoute(directionsService, directionsRenderer);
+
+            const imageUTC2 = {
+                url:"utc2.png",
+                size: new google.maps.Size(90, 90),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(30, 30)
+            };
+
+            const image = {
+                url:"tuanhoang.jpg",
+                size: new google.maps.Size(90, 90),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(30, 30)
+            };
+
+            const markerutc2 = new google.maps.Marker({
+                position: utc2,
+                title: "Trường Đại Học Giao Thông Vận Tải Phân Hiệu tại TP.Hồ Chí Minh",
+                icon: imageUTC2,
+                map: map,
+            });
+
+            const markernha = new google.maps.Marker({
+                position: home,
+                title: "Nơi Ở",
+                icon: image,
+                map: map,
+            });
+
+            const diachiutc2 = '<b>Đại Học Giao Thông Vận Tải Phân Hiệu Tại TP. Hồ Chí Minh</b>'
+                + '<br>Địa chỉ: 451 Lê Văn Việt, Tăng Nhơn Phú A, Quận 9, Thành Phố Hồ Chí Minh';
+            const diachinha = '<b>Họ và tên: Hoàng Huy Tuấn</b>'
+                + '<br><b>MSSV: 5951071116</b>'
+                + '<br><b>Quê quán: Gia Lai</b>'
+                + '<br><b>Email: Htuan8288@gmail.com</b>'
+            const infoWindow = new google.maps.InfoWindow({
+                content: diachiutc2,
+            });
+            const infoWindow2 = new google.maps.InfoWindow({
+                content: diachinha,
+            });
+            markernha.addListener("click", () => {
+                infoWindow2.open(map, markernha);
+            });
+            markerutc2.addListener("click", () => {
+                infoWindow.open(map, markerutc2);
+            });
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+            var utc2 = new google.maps.LatLng(10.845650, 106.794597);
+            var home = new google.maps.LatLng(13.691917, 108.084083);
+            directionsService.route(
+                {
+                    origin: home,
+                    destination: utc2,
+                    travelMode: google.maps.TravelMode.DRIVING,
+
+                },
+                (response, status) => {
+                    if (status === "OK") {
+                        directionsRenderer.setDirections(response);
+                    } else { window.alert("Directions request failed due to " + status); }
+                });
+        }
+    </script>
+    <script>
+    </script>
+    <!-- jsFiddle will insert css and js -->
+</head>
+
+<body>
+    <div id="map"></div>
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIwzALxUPNbatRBj3Xi1Uhp0fFzwWNBkE&callback=initMap">
+        </script>
+</body>
+
+</html>
